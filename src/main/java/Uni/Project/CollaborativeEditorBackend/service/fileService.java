@@ -14,7 +14,6 @@ public class fileService {
     private fileRepository fileRepo;
 
     public File addFile(File doc){
-        doc.setFileID(UUID.randomUUID().toString().split("-")[0]);
         return fileRepo.save(doc);
     }
 
