@@ -1,0 +1,6 @@
+spring:
+   data:
+     mongodb:
+            uri: mongodb+srv://basim:t0428h0CGiWb7iiz@rhg.t2btfrs.mongodb.net/?retryWrites=true&w=majority&appName=RHG
+            database: CollaborativeEditor
+
