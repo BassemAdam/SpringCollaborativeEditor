@@ -13,7 +13,7 @@ import org.springframework.data.annotation.Id;
 public class File {
 
     @Id
-    private String FileID;
+    private String fileID;
     private String fileName;
 
     //add raw data here
