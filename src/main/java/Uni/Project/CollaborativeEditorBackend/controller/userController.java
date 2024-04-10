@@ -27,12 +27,10 @@ public class userController {
         return service.addUser(user);
     }
 
-
     @GetMapping("/all")
     public List<User> getAllUsers(){
         return service.findAllUsers();
     }
-
 
     @GetMapping("/{id}")
     public User findUserById(@PathVariable String id) {
