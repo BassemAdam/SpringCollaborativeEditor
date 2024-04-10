@@ -18,7 +18,6 @@ public class userService {
     //CRUD Create,Read,Update,Delete
 
     public User addUser(User user){
-        user.setUserID(UUID.randomUUID().toString().split("-")[0]);
        return userRepo.save(user);
     }
 
