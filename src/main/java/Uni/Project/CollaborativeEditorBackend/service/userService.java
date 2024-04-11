@@ -33,8 +33,6 @@ public class userService {
         User FoundedUser =userRepo.findById(user.getUserID()).orElse(null);
         FoundedUser.setPassword(user.getPassword());
         FoundedUser.setEmail(user.getEmail());
-        FoundedUser.setRole(user.getRole());
-
         return userRepo.save(FoundedUser);
     }
 
@@ -43,4 +41,7 @@ public class userService {
         return id +" Deleted Successfully!";
     }
 
+    public User findUserByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
 }

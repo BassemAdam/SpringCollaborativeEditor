@@ -43,10 +43,8 @@ public class userController {
         User existingUser = service.findUserById(id);
 
         // Then, update the existing user with the new data
-        existingUser.setUsername(user.getUsername());
         existingUser.setPassword(user.getPassword());
         existingUser.setEmail(user.getEmail());
-        existingUser.setRole(user.getRole());
 
         // Finally, save the updated user and return it
         return service.updateUser(existingUser);
