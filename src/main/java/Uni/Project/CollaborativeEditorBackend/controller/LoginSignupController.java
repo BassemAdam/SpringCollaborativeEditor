@@ -1,16 +1,22 @@
 package Uni.Project.CollaborativeEditorBackend.controller;
 
 import Uni.Project.CollaborativeEditorBackend.model.LoginRequest;
+import Uni.Project.CollaborativeEditorBackend.model.LoginResponse;
 import Uni.Project.CollaborativeEditorBackend.model.User;
 import Uni.Project.CollaborativeEditorBackend.service.userService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/auth")
 public class LoginSignupController {
+
 
     @Autowired
     private userService service;
@@ -27,11 +33,14 @@ public class LoginSignupController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         User existingUser = service.findUserByUsername(loginRequest.getUsername());
         if (existingUser != null && existingUser.getPassword().equals(loginRequest.getPassword())) {
-            return new ResponseEntity<>(existingUser, HttpStatus.OK);
+            String token = "AUTH_TOKEN_EYBBJJNXS92U8HBS";
+            LoginResponse response = new LoginResponse(existingUser,token);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }
+
