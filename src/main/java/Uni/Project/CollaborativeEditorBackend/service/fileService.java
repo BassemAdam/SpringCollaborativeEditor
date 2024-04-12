@@ -6,6 +6,8 @@ import Uni.Project.CollaborativeEditorBackend.model.UserFile;
 import Uni.Project.CollaborativeEditorBackend.repository.fileRepository;
 import Uni.Project.CollaborativeEditorBackend.repository.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -25,11 +27,15 @@ public class fileService {
         return fileRepo.findById(id).orElse(null);
     }
 
-    public String deleteFile(String id){
-        fileRepo.deleteById(id);
-        return id +" Deleted Successfully!";
+    public ResponseEntity<String> deleteFile(String id){
+        Optional<File> file = fileRepo.findById(id);
+        if (file.isPresent()) {
+            fileRepo.deleteById(id);
+            return new ResponseEntity<>(id + " Deleted Successfully!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
     }
-
     public File updateFileName(String id, String newFileName) {
         Optional<File> optionalFile = fileRepo.findById(id);
         if (optionalFile.isPresent()) {

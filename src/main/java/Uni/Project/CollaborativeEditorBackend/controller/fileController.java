@@ -25,7 +25,7 @@ public class fileController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteFile(@PathVariable String id) {
+    public ResponseEntity<String> deleteFile(@PathVariable String id) {
         return service.deleteFile(id);
     }
 
