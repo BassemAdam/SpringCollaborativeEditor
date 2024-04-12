@@ -2,6 +2,7 @@ package Uni.Project.CollaborativeEditorBackend.controller;
 
 import Uni.Project.CollaborativeEditorBackend.model.LoginRequest;
 import Uni.Project.CollaborativeEditorBackend.model.LoginResponse;
+import Uni.Project.CollaborativeEditorBackend.model.SignUpRequest;
 import Uni.Project.CollaborativeEditorBackend.model.User;
 import Uni.Project.CollaborativeEditorBackend.service.userService;
 import io.jsonwebtoken.Jwts;
@@ -22,12 +23,17 @@ public class LoginSignupController {
     private userService service;
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody User user) {
+    public ResponseEntity<User> signup(@RequestBody SignUpRequest user) {
         User existingUser = service.findUserByUsername(user.getUsername());
         if (existingUser != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        User newUser = service.addUser(user);
+        User newUser = new User();
+        newUser.setUsername(user.getUsername()); // replace "username" with the actual username
+        newUser.setEmail(user.getEmail()); // replace "email" with the actual email
+        newUser.setPassword(user.getPassword()); // replace "password" with the actual password
+
+        newUser = service.addUser(newUser);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
