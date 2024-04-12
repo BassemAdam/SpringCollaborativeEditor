@@ -3,6 +3,7 @@ package Uni.Project.CollaborativeEditorBackend.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,9 +26,14 @@ public class User {
     //so i have added just to avoid errors
     @Id
     private String userID;
+
     private String username;
     private String password;
     private String email;
+
+    public String getUsername(){
+        return username;
+    }
     //private List<UserFile> files;
 //    public boolean hasFileWithRole(String fileID, UserFile.Role role) {
 //        for (UserFile userFile : files) {
