@@ -1,9 +1,6 @@
 package Uni.Project.CollaborativeEditorBackend.controller;
 
-import Uni.Project.CollaborativeEditorBackend.model.File;
-import Uni.Project.CollaborativeEditorBackend.model.ShareFileRequest;
-import Uni.Project.CollaborativeEditorBackend.model.UpdateFileNameRequest;
-import Uni.Project.CollaborativeEditorBackend.model.User;
+import Uni.Project.CollaborativeEditorBackend.model.*;
 import Uni.Project.CollaborativeEditorBackend.service.fileService;
 import Uni.Project.CollaborativeEditorBackend.service.userService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,4 +54,26 @@ public class fileController {
            return new ResponseEntity<>(service.shareFile(request.getUserId(), request.getFileId(), request.getFileName(), request.getRole()), HttpStatus.OK);
 
        }
+
+    @PostMapping("/createFile")
+    public ResponseEntity<?> createFile(@RequestBody CreateFileRequest request) {
+        User user = usrService.findUserById(request.getUserId());
+        if (user == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        File file = new File();
+        file.setFileName(request.getFileName());
+        file = service.addFile(file); // This should save the file to the database and set the fileID
+
+        UserFile userFile = new UserFile();
+        userFile.setFileID(file.getFileID());
+        userFile.setFileName(file.getFileName());
+        userFile.setRole(UserFile.Role.OWNER);
+
+        user.getFiles().add(userFile);
+        usrService.saveUser(user); // This should save the user to the database
+
+        return new ResponseEntity<>(file, HttpStatus.CREATED);
+    }
 }
