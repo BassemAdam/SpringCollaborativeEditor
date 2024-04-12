@@ -48,4 +48,8 @@ public class userService {
     public void saveUser(User user) {
         userRepo.save(user);
     }
+
+    public User findUserByEmail(String email) {
+        return userRepo.findByEmail(email);
+    }
 }

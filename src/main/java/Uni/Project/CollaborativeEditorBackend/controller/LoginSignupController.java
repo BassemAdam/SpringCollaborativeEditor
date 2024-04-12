@@ -24,8 +24,9 @@ public class LoginSignupController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/signup")
     public ResponseEntity<User> signup(@RequestBody SignUpRequest user) {
-        User existingUser = service.findUserByUsername(user.getUsername());
-        if (existingUser != null) {
+        User existingUserByUsername = service.findUserByUsername(user.getUsername());
+        User existingUserByEmail = service.findUserByEmail(user.getEmail());
+        if (existingUserByUsername != null || existingUserByEmail != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         User newUser = new User();
