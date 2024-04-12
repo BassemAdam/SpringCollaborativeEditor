@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/file")
 public class fileController {
 
@@ -55,6 +56,7 @@ public class fileController {
 
        }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/createFile")
     public ResponseEntity<?> createFile(@RequestBody CreateFileRequest request) {
         User user = usrService.findUserById(request.getUserId());
