@@ -10,8 +10,13 @@ import lombok.NoArgsConstructor;
 public class UserFile {
 
 
-    private File file;
+    //private File file;
+    private String fileID;
+    private String fileName;
     private Role role;
+
+
+
     public enum Role {
         OWNER,
         VIEWER,

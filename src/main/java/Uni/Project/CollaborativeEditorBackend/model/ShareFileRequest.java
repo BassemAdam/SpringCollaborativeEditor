@@ -8,6 +8,7 @@ import lombok.Data;
 public class ShareFileRequest {
     private String userId;
     private String fileId;
+    private String fileName;
     private UserFile.Role role;
 
 }

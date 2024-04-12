@@ -8,7 +8,6 @@ import Uni.Project.CollaborativeEditorBackend.repository.userRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class fileService {
@@ -42,15 +41,18 @@ public class fileService {
         }
     }
 
-    public User shareFile(String userId, String fileId, UserFile.Role role) {
-        User user = userRepoo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id " + userId));
-        File file = fileRepo.findById(fileId).orElseThrow(() -> new RuntimeException("File not found with id " + fileId));
+   public User shareFile(String userId, String fileId, String fileName, UserFile.Role role) {
+    User user = userRepoo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id " + userId));
+    File file = fileRepo.findById(fileId).orElseThrow(() -> new RuntimeException("File not found with id " + fileId));
 
-        UserFile userFile = new UserFile();
-        userFile.setFile(file);
-        userFile.setRole(role);
+    UserFile userFile = new UserFile();
+    userFile.setFileID(fileId);
+    userFile.setFileName(fileName); // set the fileName
+    userFile.setRole(role);
 
-        user.getFiles().add(userFile);
-        return userRepoo.save(user);
-    }
+    user.getFiles().add(userFile);
+    return userRepoo.save(user);
+}
+
+
 }
