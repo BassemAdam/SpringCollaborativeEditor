@@ -19,16 +19,18 @@ public class fileController {
     @Autowired
     private userService usrService;
 
-    @GetMapping("/{id}")
-    public File getFile(@PathVariable String id) {
-        return service.findFileById(id);
+    @GetMapping("/{id}/{userId}")
+    public File getFile(@PathVariable String id, @PathVariable String userId) {
+        return service.getFile(id, userId);
     }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteFile(@PathVariable String id) {
-        return service.deleteFile(id);
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<String> deleteFile(@PathVariable String id) {
+//        return service.deleteFile(id);
+//    }
+    @DeleteMapping("/delete/{id}/{userId}")
+    public ResponseEntity<String> deleteFile(@PathVariable String id, @PathVariable String userId) {
+        return service.deleteFile(id, userId);
     }
-
     @RequestMapping("/add")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -36,25 +38,34 @@ public class fileController {
         return service.addFile(file);
     }
 
-    @PutMapping("/update/{id}")
-    public File updateFileName(@PathVariable String id, @RequestBody UpdateFileNameRequest request) {
-        return service.updateFileName(id, request.getFileName());
+      @PutMapping("/update/{id}/{userId}")
+    public File updateFileName(@PathVariable String id, @PathVariable String userId, @RequestBody UpdateFileNameRequest request) {
+        return service.updateFileName(id, request.getFileName(), userId);
     }
 
-       @PostMapping("/shareFile")
-        public ResponseEntity<?> shareFile(@RequestBody ShareFileRequest request) {
-            User user = usrService.findUserById(request.getUserId());
-            if (user == null) {
-                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-            }
+@PostMapping("/shareFile/{ownerId}")
+public ResponseEntity<?> shareFile(@PathVariable String ownerId, @RequestBody ShareFileRequest request) {
+    User owner = usrService.findUserById(ownerId);
+    if (owner == null) {
+        return new ResponseEntity<>("Owner not found", HttpStatus.NOT_FOUND);
+    }
 
-            if (user.hasFileWithRole(request.getFileId(), request.getRole())) {
-                return new ResponseEntity<>("User already has this file with the given role", HttpStatus.CONFLICT);
-            }
+    User user = usrService.findUserById(request.getUserId());
+    if (user == null) {
+        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+    }
 
-           return new ResponseEntity<>(service.shareFile(request.getUserId(), request.getFileId(), request.getFileName(), request.getRole()), HttpStatus.OK);
+    // Check if the owner is trying to share the file with themselves
+    if (ownerId.equals(request.getUserId())) {
+        return new ResponseEntity<>("Cannot share file with yourself", HttpStatus.BAD_REQUEST);
+    }
 
-       }
+    if (owner.hasFileWithRole(request.getFileId(), UserFile.Role.OWNER)) {
+        return new ResponseEntity<>(service.shareFile(request.getUserId(), request.getFileId(), request.getFileName(), request.getRole()), HttpStatus.OK);
+    } else {
+        return new ResponseEntity<>("Owner does not have this file", HttpStatus.CONFLICT);
+    }
+}
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/createFile")

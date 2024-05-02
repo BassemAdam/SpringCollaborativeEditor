@@ -44,7 +44,7 @@ public class User {
 //        return false;
 //    }
     public boolean hasFileWithRole(String fileId, UserFile.Role role) {
-        return this.files.stream()
-                .anyMatch(userFile -> fileId.equals(userFile.getFileID()) && role.equals(userFile.getRole()));
-    }
+    return this.getFiles().stream()
+        .anyMatch(userFile -> userFile.getFileID().equals(fileId) && userFile.getRole() == role);
+}
 }
