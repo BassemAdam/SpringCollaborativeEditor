@@ -3,10 +3,7 @@ package Uni.Project.CollaborativeEditorBackend.controller;
 import Uni.Project.CollaborativeEditorBackend.model.File;
 import Uni.Project.CollaborativeEditorBackend.service.otServerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.InetAddress;
 
@@ -22,4 +19,9 @@ public class otController {
     public int connect(@PathVariable String id){
         return service.connect(id);
     }
+
+    // Request to connect a socket from client to server
+    // returns true if successful connection, false if failed
+    @PostMapping("/{id}/connectSocket")
+    public boolean connectSocket (@PathVariable String id){ return service.connectSockets(id);}
 }
