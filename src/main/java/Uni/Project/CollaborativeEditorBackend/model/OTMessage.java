@@ -1,5 +1,12 @@
 package Uni.Project.CollaborativeEditorBackend.model;
 
+import lombok.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class OTMessage {
     String userID;
     int version;
@@ -10,4 +17,5 @@ public class OTMessage {
 enum messageType{
     insert,
     delete,
+    // TODO - CHECK IF "JOIN" & "LEAVE" ARE NEEDED
 }
