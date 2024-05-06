@@ -89,4 +89,20 @@ public ResponseEntity<?> shareFile(@PathVariable String ownerId, @RequestBody Sh
 
         return new ResponseEntity<>(file, HttpStatus.CREATED);
     }
+
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PatchMapping("/saveEdits/{id}/{userId}")
+    public ResponseEntity<?> saveEdits(@RequestBody SaveEditRequest request, @PathVariable String id, @PathVariable String userId)
+    {
+        User user = usrService.findUserById(userId);
+        if (user == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        service.findFileAndUpdate(id,request.getContent());
+        File updatedFile = service.findFileById(id);
+        return new ResponseEntity<>(updatedFile, HttpStatus.ACCEPTED);
+    }
+
+
 }
