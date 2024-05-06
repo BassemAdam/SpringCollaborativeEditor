@@ -15,5 +15,5 @@ public class File {
     @Id
     private String fileID;
     private String fileName;
-    private String fileContent;
+    private Object fileContent;
 }

@@ -128,4 +128,10 @@ public User shareFile(String userId, String fileId, String fileName, UserFile.Ro
     public File findFileById(String id) {
         return fileRepo.findById(id).orElse(null);
     }
+
+    public File findFileAndUpdate(String id, Object content){
+        File file = findFileById(id);
+        file.setFileContent(content);
+        return fileRepo.save(file);
+    }
 }
