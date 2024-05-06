@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
 
@@ -21,6 +22,9 @@ public class LoginSignupController {
 
     @Autowired
     private userService service;
+
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/signup")
     public ResponseEntity<User> signup(@RequestBody SignUpRequest user) {
@@ -30,9 +34,12 @@ public class LoginSignupController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         User newUser = new User();
-        newUser.setUsername(user.getUsername()); // replace "username" with the actual username
-        newUser.setEmail(user.getEmail()); // replace "email" with the actual email
-        newUser.setPassword(user.getPassword()); // replace "password" with the actual password
+        newUser.setUsername(user.getUsername());
+        newUser.setEmail(user.getEmail());
+
+        // Hash the password
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        newUser.setPassword(hashedPassword);
 
         newUser = service.addUser(newUser);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
@@ -42,12 +49,13 @@ public class LoginSignupController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         User existingUser = service.findUserByUsername(loginRequest.getUsername());
-        if (existingUser != null && existingUser.getPassword().equals(loginRequest.getPassword())) {
+        if (existingUser != null && passwordEncoder.matches(loginRequest.getPassword(), existingUser.getPassword())) {
             String token = "AUTH_TOKEN_EYBBJJNXS92U8HBS";
             LoginResponse response = new LoginResponse(existingUser,token);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+
 }
 
