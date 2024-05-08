@@ -25,9 +25,7 @@ public class fileService {
         return fileRepo.save(doc);
     }
 
-//    public File findFileById(String id){
-//        return fileRepo.findById(id).orElse(null);
-//    }
+
 
     public File getFile(String id, String userId) {
         File file = fileRepo.findById(id).orElseThrow(() -> new RuntimeException("File not found with id " + id));
@@ -67,7 +65,7 @@ public class fileService {
         }
     }
 
-   public File updateFileName(String id, String newFileName, String userId) {
+    public File updateFileName(String id, String newFileName, String userId) {
     Optional<File> optionalFile = fileRepo.findById(id);
     if (optionalFile.isPresent()) {
         // Check if the user is authorized to edit the file
@@ -99,7 +97,7 @@ public class fileService {
         throw new RuntimeException("File not found with id " + id);
     }
 }
-public User shareFile(String userId, String fileId, String fileName, UserFile.Role role) {
+    public User shareFile(String userId, String fileId, String fileName, UserFile.Role role) {
     User user = userRepoo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id " + userId));
     File file = fileRepo.findById(fileId).orElseThrow(() -> new RuntimeException("File not found with id " + fileId));
 
@@ -124,7 +122,6 @@ public User shareFile(String userId, String fileId, String fileName, UserFile.Ro
     return userRepoo.save(user);
 }
 
-
     public File findFileById(String id) {
         return fileRepo.findById(id).orElse(null);
     }
@@ -133,5 +130,16 @@ public User shareFile(String userId, String fileId, String fileName, UserFile.Ro
         File file = findFileById(id);
         file.setFileContent(content);
         return fileRepo.save(file);
+    }
+
+
+    public User ashraoufapiwanted(String userId, String fileId) {
+        User user = userRepoo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id " + userId));
+
+        // Remove the UserFile from the user's list of files
+        user.getFiles().removeIf(userFile -> userFile.getFileID().equals(fileId));
+
+        // Save the updated user
+        return userRepoo.save(user);
     }
 }
