@@ -31,6 +31,7 @@ public class userService {
 
     public User updateUser(User user){
         User FoundedUser =userRepo.findById(user.getUserID()).orElse(null);
+        assert FoundedUser != null;
         FoundedUser.setPassword(user.getPassword());
         FoundedUser.setEmail(user.getEmail());
         return userRepo.save(FoundedUser);

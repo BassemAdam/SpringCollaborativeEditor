@@ -97,8 +97,11 @@ public class fileService {
         throw new RuntimeException("File not found with id " + id);
     }
 }
-    public User shareFile(String userId, String fileId, String fileName, UserFile.Role role) {
-    User user = userRepoo.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id " + userId));
+    public User shareFile(String username, String fileId, UserFile.Role role) {
+    User user = userRepoo.findByUsername(username);
+    if(user == null){
+        throw new RuntimeException("User " +username+ " not found");
+    }
     File file = fileRepo.findById(fileId).orElseThrow(() -> new RuntimeException("File not found with id " + fileId));
 
     // Check if the file is already shared with the user
@@ -114,7 +117,7 @@ public class fileService {
         // If it's the first time the file is being shared, add it to the user's list of files
         UserFile userFile = new UserFile();
         userFile.setFileID(fileId);
-        userFile.setFileName(fileName);
+        userFile.setFileName(file.getFileName());
         userFile.setRole(role);
         user.getFiles().add(userFile);
     }
@@ -142,4 +145,8 @@ public class fileService {
         // Save the updated user
         return userRepoo.save(user);
     }
+
+//    public File[] getUserFiles(String id) {
+//
+//    }
 }

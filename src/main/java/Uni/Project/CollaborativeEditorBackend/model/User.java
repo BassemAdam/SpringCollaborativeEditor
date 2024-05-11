@@ -26,23 +26,11 @@ public class User {
     //so i have added just to avoid errors
     @Id
     private String userID;
-
     private String username;
     private String password;
     private String email;
 
-    public String getUsername(){
-        return username;
-    }
-    //private List<UserFile> files;
-//    public boolean hasFileWithRole(String fileID, UserFile.Role role) {
-//        for (UserFile userFile : files) {
-//            if (userFile.getFileID().equals(fileID) && userFile.getRole().equals(role)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+
     public boolean hasFileWithRole(String fileId, UserFile.Role role) {
     return this.getFiles().stream()
         .anyMatch(userFile -> userFile.getFileID().equals(fileId) && userFile.getRole() == role);

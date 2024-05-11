@@ -47,18 +47,18 @@ public class fileController {
             return new ResponseEntity<>("Owner not found", HttpStatus.NOT_FOUND);
         }
 
-        User user = usrService.findUserById(request.getUserId());
+        User user = usrService.findUserByUsername(request.getUsername());
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
         // Check if the owner is trying to share the file with themselves
-        if (ownerId.equals(request.getUserId())) {
+        if (ownerId.equals(request.getUsername())) {
             return new ResponseEntity<>("Cannot share file with yourself", HttpStatus.BAD_REQUEST);
         }
 
         if (owner.hasFileWithRole(request.getFileId(), UserFile.Role.OWNER)) {
-            return new ResponseEntity<>(service.shareFile(request.getUserId(), request.getFileId(), request.getFileName(), request.getRole()), HttpStatus.OK);
+            return new ResponseEntity<>(service.shareFile(request.getUsername(), request.getFileId(), request.getRole()), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Owner does not have this file", HttpStatus.CONFLICT);
         }

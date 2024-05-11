@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class ShareFileRequest {
-    private String userId;
+    private String username;
     private String fileId;
-    private String fileName;
+//    private String fileName;
     private UserFile.Role role;
 
 }
