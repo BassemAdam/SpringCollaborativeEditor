@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/file")
@@ -22,6 +24,16 @@ public class fileController {
     @GetMapping("/{id}/{userId}")
     public File getFile(@PathVariable String id, @PathVariable String userId) {
         return service.getFile(id, userId);
+    }
+
+    @GetMapping("/access/{fileId}")
+    public List<User> getAccessUsers(@PathVariable String fileId)
+    {
+        List<User> users = service.getAccessUsers(fileId);
+        if(users.isEmpty()){
+            throw new RuntimeException("unable to fetch users");
+        }
+        return service.getAccessUsers(fileId);
     }
 
     @DeleteMapping("/delete/{id}/{userId}")

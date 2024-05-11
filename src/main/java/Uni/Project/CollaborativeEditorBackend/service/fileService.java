@@ -146,7 +146,9 @@ public class fileService {
         return userRepoo.save(user);
     }
 
-//    public File[] getUserFiles(String id) {
-//
-//    }
-}
+        public List<User> getAccessUsers(String fileId) {
+        return userRepoo.findByFilesFileID(fileId);
+        }
+    }
+
+
